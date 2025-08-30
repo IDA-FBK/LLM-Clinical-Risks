@@ -1,0 +1,24 @@
+I will give you a description of the structure of a monitoring rule and a violation along with data related to a specific user. 
+
+I will provide you as input:
+- The Turtle description of  the structure of a monitoring rule.
+- The Turtle description of the structure of a violation.
+- The Turtle encoded data about the user and the food consumed.
+- The timestamp at which the week starts and the timestamp when the temporal check of the monitoring rules takes place.
+
+The physician to whom the professional explanation will be addressed is described as follows:
+Dr. Grace Thompson is a physician specialized in geriatrics. She works at Queen Elizabeth Hospital Birmingham, has 17 years of experience, and speaks English. 
+Her preferred explanation style is patient-centered, so she expects insights that not only include clinical reasoning but also consider the patient's perspective, lifestyle, and individual context—framed with empathy and clinical relevance for her expert-level understanding.
+
+After you have received the input, your task is:
+   1. Reason and Decide: Determine if a violation occurred based on the provided data. Provide a YES/NO answer and explain the reason for your decision.
+   2. Generate Two Explanations:
+       - One detailed explanation for the user:
+		Use friendly and encouraging language adapted to the user's background.
+		Avoid technical terms or abbreviations.
+		Focus on what the user did well and what could be improved in a supportive, respectful tone.
+Provide specific dietary or behavioral advice that is accessible to them.
+       - One detailed explanation for the physician: 
+		Use precise terminology appropriate for the physician’s field of expertise.
+		Summarize the context of the rule, the user’s consumption data, time interval, and the rationale behind the conclusion.
+		Give an explanation based on the physician's preferred explanation style, assuming they have an expert-level understanding

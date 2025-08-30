@@ -1,0 +1,747 @@
+I will give you a description of the structure of a monitoring rule and a violation along with data related to a specific user. 
+
+I will provide you as input:
+- The Turtle description of  the structure of a monitoring rule.
+- The Turtle description of the structure of a violation.
+- The Turtle description of the structure of an activity.
+- The Turtle encoded data about the user and the food consumed.
+- The timestamp at which the week starts and the timestamp when the temporal check of the monitoring rules takes place.
+
+After you have received the input, your task is:
+   1. Reason and Decide: Determine if a violation occurred based on the provided data. Provide a YES/NO answer and explain the reason for your decision.
+   2. Generate Two Explanations:
+       - One detailed explanation for the user, using simple and comprehensible language.
+       - One detailed explanation for the physician, using precise and professional terminology.
+
+
+The Turtle description of the structure of a monitoring rule is:
+
+###  https://w3id.org/fuskg/guidelines#MonitoringRule
+fsguid:MonitoringRule rdf:type owl:Class ;
+	rdfs:comment "This concept enables the definition of rules 
+	that can be associated to a specific user or to a specific 
+	profile in order to support monitoring activities."@en ;
+ 	rdfs:label "Monitoring Rule"@en ,
+                            "Regole di Monitoraggio"@it .
+
+###  https://w3id.org/fuskg/guidelines#ValueInterval
+fsguid:ValueInterval rdf:type owl:Class ;
+          rdfs:comment "This concept enables the definition of numerical intervals of the form [lowerBound, upperBound] that can be associated with an instance of the MonitoringRule concept."@en ;
+	rdfs:label "Intervalli"@it ,
+		    "Value Interval"@en .
+
+###  https://w3id.org/fuskg/user#User
+fsuser:User rdf:type owl:Class ;
+	rdfs:comment "This is the root concept for the User branch. All sub-concepts represent a specific category of users, if necessary."@en ;
+            rdfs:label "User"@en ,
+                             "Utente"@it .
+
+###  https://w3id.org/fuskg/guidelines#monitors
+fsguid:monitors rdf:type owl:ObjectProperty ;
+ 	rdfs:domain fsguid:MonitoringRule ;
+	rdfs:range fsuser:User ;
+ 	rdfs:comment "This property specifies the subject of a MonitoringRule."@en ;
+	rdfs:label "monitora"@it ,
+                            "monitors"@en .
+
+###  https://w3id.org/fuskg/guidelines#hasMonitoredValueInterval
+fsguid:hasMonitoredValueInterval rdf:type owl:ObjectProperty ;
+	rdfs:domain fsguid:MonitoringRule ;
+	rdfs:range fsguid:ValueInterval ;
+	rdfs:comment "This property specifies the subject of a MonitoringRule."@en .
+
+###  https://w3id.org/fuskg/guidelines#hasRuleDefinition
+fsguid:hasRuleDefinition rdf:type owl:DatatypeProperty ;
+	rdfs:domain fsguid:MonitoringRule ;
+	rdfs:range xsd:string ;
+	rdfs:comment "This property specifies the monitored value of a MonitoringValueInterval."@en ;
+	rdfs:label "ha definizione della regola"@it ,
+		     "has rule definition"@en .
+
+###  https://w3id.org/fuskg/guidelines#hasMonitoredValue
+fsguid:hasMonitoredValue rdf:type owl:AnnotationProperty ;
+	rdfs:domain fsguid:MonitoringRule ;
+            rdfs:range xsd:double ;
+	rdfs:comment "This property specifies the monitored value of a MonitoringRule."@en .
+
+###  https://w3id.org/fuskg/guidelines#timing
+fsguid:timing rdf:type owl:AnnotationProperty ;
+	rdfs:domain fsguid:MonitoringRule ;
+	rdfs:range [ rdf:type owl:Class ; owl:unionOf ( fstemp:Week fstemp:Day fstemp:Meal ) ] ; 
+	rdfs:comment "This property defines the frequency associated with a MonitoringRule."@en .
+
+###  https://w3id.org/fuskg/guidelines#hasOperator
+fsguid:hasOperator rdf:type owl:AnnotationProperty ;
+	rdfs:domain fsguid:MonitoringRule ;
+	rdfs:range xsd:string ;
+	rdfs:comment "This property specifies the operator (e.g., Greater, Less) for a monitored value within a MonitoringRule"@en .
+
+###  https://w3id.org/fuskg/guidelines#hasRuleId
+fsguid:hasRuleId rdf:type owl:AnnotationProperty ;
+	rdfs:domain fsguid:MonitoringRule ;
+            rdfs:range xsd:string ;
+	rdfs:comment "This property specifies the unique identifier for a MonitoringRule."@en .
+
+###  https://w3id.org/fuskg/guidelines#monitoredEntity
+fsguid:monitoredEntity rdf:type owl:AnnotationProperty ;
+	rdfs:domain fsguid:MonitoringRule ;
+	rdfs:range [ rdf:type owl:Class ; owl:unionOf ( fsacti:ACTIVITY-15560-A fsacti:ACTIVITY-17035-A fsacti:ACTIVITY-12020 fsfood:Beverages fsfood:CerealAndGrainProducts fsfood:CulinaryHerbs fsfood:Eggs fsfood:FatsAndOils fsfood:FishAndSeafood fsfood:Fruits fsfood:Meat fsfood:MilkAndDairyProducts fsfood:Mushrooms fsfood:NutSeedAndOlivesProducts fsfood:Salt fsfood:SausagesAndColdCuts fsfood:Spices fsfood:SugarAndSweets fsfood:VegetablesAndLegumes fsfood:Broth fsfood:Alcohol fsfood:Aminoacid fsfood:Carbs fsfood:DietaryFiber fsfood:Lipid fsfood:Mineral fsfood:Mineral fsfood:Protein fsfood:Vitamin ) ] ; 
+	rdfs:comment "This property identifies the entity being monitored by a MonitoringRule."@en .
+
+###  https://w3id.org/fuskg/guidelines#monitoredEntityType
+fsguid:monitoredEntityType rdf:type owl:AnnotationProperty ;
+`	rdfs:domain fsguid:MonitoringRule ;
+	rdfs:range [ rdf:type owl:Class ; owl:unionOf ( fsacti:Sports fsacti:Walking fsacti:Running fscore:Food fscore:Nutrient ) ] ;
+	rdfs:comment "This property specifies the type of entity being monitored by a MonitoringRule."@en . 
+
+The Turtle description of the structure of a violation is:
+
+###  https://w3id.org/fuskg/user#Violation
+fsuser:Violation rdf:type owl:Class ;
+	rdfs:comment "This concept represents violations associated with a specific user. Instances of the Violation concept can be the result of reasoning activities provided by third-party applications."@en ;
+	rdfs:label "Violation"@en ,
+                            "Violazione"@it .
+
+###  https://w3id.org/fuskg/user#ViolationInterval
+fsuser:ViolationInterval rdf:type owl:Class ;
+	rdfs:comment "This concept is used for defining tollerances associated with Violation instances. These tollerances can be used for computing the gravity of each violation."@en ;
+ 	rdfs:label "Intervalli di Violazione"@it ,
+                              "Violation Interval"@en .
+
+###  https://w3id.org/fuskg/user#hasViolationMeal
+fsuser:hasViolationMeal rdf:type owl:ObjectProperty ;
+	rdfs:domain fsuser:Violation ;
+	rdfs:range fsuser:Meal ;
+	rdfs:comment "This property specifies which Meal triggered the violation."@en ;
+	rdfs:label "ha violazione sul pasto"@it ,
+                            "has violation on Meal"@en .
+
+
+###  https://w3id.org/fuskg/user#hasViolationRule
+fsuser:hasViolationRule rdf:type owl:ObjectProperty ;
+	rdfs:domain fsuser:Violation ;
+	rdfs:range fsguid:MonitoringRule ;
+	rdfs:comment "This property specifies which rule is violated."@en ;
+	rdfs:label "ha violazione sulla regola"@it ,
+                            "has violation on rule"@en .
+
+
+###  https://w3id.org/fuskg/user#hasViolationUser
+fsuser:hasViolationUser rdf:type owl:ObjectProperty ;
+	rdfs:domain fsuser:Violation ;
+	rdfs:range fsuser:User ;
+	rdfs:comment "This property specifies which User the violation refers to."@en ;
+	rdfs:label "ha violazione per l'utente"@it ,
+		    "has violation User"@en .
+
+
+###  https://w3id.org/fuskg/user#hasViolationEndTime
+fsuser:hasViolationEndTime rdf:type owl:DatatypeProperty ;
+	rdfs:domain fsuser:Violation ;
+	rdfs:range xsd:dateTimeStamp ;
+	rdfs:comment "This property specifies the time at which the violation ends."@en ;
+	rdfs:label "ha orario di fine violazione"@it ,
+		    "has violation end time"@en .
+
+
+###  https://w3id.org/fuskg/user#hasViolationEntity
+fsuser:hasViolationEntity rdf:type owl:DatatypeProperty ;
+	rdfs:domain fsuser:Violation ;
+	rdfs:range [ rdf:type owl:Class ; owl:unionOf ( fsacti:ACTIVITY-15560-A fsacti:ACTIVITY-17035-A fsacti:ACTIVITY-12020 fsfood:Beverages fsfood:CerealAndGrainProducts fsfood:CulinaryHerbs fsfood:Eggs fsfood:FatsAndOils fsfood:FishAndSeafood fsfood:Fruits fsfood:Meat fsfood:MilkAndDairyProducts fsfood:Mushrooms fsfood:NutSeedAndOlivesProducts fsfood:Salt fsfood:SausagesAndColdCuts fsfood:Spices fsfood:SugarAndSweets fsfood:VegetablesAndLegumes fsfood:Broth fsfood:Alcohol fsfood:Aminoacid fsfood:Carbs fsfood:DietaryFiber fsfood:Lipid fsfood:Mineral fsfood:Mineral fsfood:Protein fsfood:Vitamin ) ] ;
+	rdfs:comment "This property specifies the entity of the violation."@en ;
+	rdfs:label "ha entita' di violazine"@it ,
+                            "has violation entity"@en .
+
+
+###  https://w3id.org/fuskg/user#hasViolationEntityType
+fsuser:hasViolationEntityType rdf:type owl:DatatypeProperty ;
+	rdfs:domain fsuser:Violation ;
+	rdfs:range [ rdf:type owl:Class ; owl:unionOf ( fsacti:Sports fsacti:Walking fsacti:Running fscore:Food fscore:Nutrient ) ] ;
+	rdfs:comment "This property specifies the entity type of the violation."@en ;
+	rdfs:label "ha tipologia di entita' di violazione"@it ,
+ 		    "has violation entity type"@en .
+
+
+###  https://w3id.org/fuskg/user#hasViolationExpectedQuantity
+fsuser:hasViolationExpectedQuantity rdf:type owl:DatatypeProperty ;
+	rdfs:domain fsuser:Violation ;
+	rdfs:range xsd:double ;
+	rdfs:comment "This property specifies the expected quantity of the violation."@en ;
+	rdfs:label "ha quantita' di violazione attesa"@it ,
+                                               "has violation expected quantity"@en .
+
+
+###  https://w3id.org/fuskg/user#hasViolationHistory
+fsuser:hasViolationHistory rdf:type owl:DatatypeProperty ;
+	rdfs:domain fsuser:Violation ;
+	rdfs:range xsd:integer ;
+	rdfs:comment "This property specifies the gistory of the violation as an integer."@en ;
+	rdfs:label "ha storia di violazione"@it ,
+		     "has violation history"@en .
+
+
+###  https://w3id.org/fuskg/user#hasViolationLevel
+fsuser:hasViolationLevel rdf:type owl:DatatypeProperty ;
+	rdfs:domain [ rdf:type owl:Class ;
+                                       owl:unionOf ( fsuser:Violation
+                                                     fsuser:ViolationInterval
+                                                   )
+                                 ] ;
+	rdfs:range xsd:integer ;
+	rdfs:comment "This property specifies the level of the violation."@en ;
+	rdfs:label "ha livello di violazione"@it ,
+		    "has violation level"@en .
+
+
+###  https://w3id.org/fuskg/user#hasViolationPriority
+fsuser:hasViolationPriority rdf:type owl:DatatypeProperty ;
+	rdfs:domain fsuser:Violation ;
+	rdfs:range xsd:integer ;
+	rdfs:comment "This property specifies the the priority of the violation as an integer."@en ;
+	rdfs:label "ha priorita' di violazione"@it ,
+		     "has violation priority"@en .
+
+
+###  https://w3id.org/fuskg/user#hasViolationQuantity
+fsuser:hasViolationQuantity rdf:type owl:DatatypeProperty ;
+	rdfs:domain fsuser:Violation ;
+	rdfs:range xsd:double ;
+            rdfs:comment "This property specifies the quantity of the violation."@en ;
+            rdfs:label "ha quantita' di violazione"@it ,
+                             "has violation quantity"@en .
+
+
+###  https://w3id.org/fuskg/user#hasViolationRuleId
+fsuser:hasViolationRuleId rdf:type owl:DatatypeProperty ;
+	rdfs:domain fsuser:Violation ;
+	rdfs:range xsd:int ;
+	rdfs:comment "This property specifies the id of the rule violated."@en ;
+            rdfs:label "ha id della regola violata"@it ,
+ 		     "has violation rule id"@en .
+
+
+###  https://w3id.org/fuskg/user#hasViolationStartTime
+fsuser:hasViolationStartTime rdf:type owl:DatatypeProperty ;
+	rdfs:domain fsuser:Violation ;
+	rdfs:range xsd:dateTimeStamp ;
+            rdfs:comment "This property specifies the the time at which the violation started."@en ;
+            rdfs:label "ha orario di inizio violazione"@it ,
+                             "has violation start time"@en .
+
+
+###  https://w3id.org/fuskg/user#hasViolationTiming
+fsuser:hasViolationTiming rdf:type owl:DatatypeProperty ;
+	rdfs:domain fsuser:Violation ;
+            rdfs:range [ rdf:type owl:Class ; owl:unionOf ( fstemp:Week fstemp:Day fstemp:Meal ) ] ;
+            rdfs:comment "This property specifies the timing of the violation."@en ;
+            rdfs:label "ha tempistica della violazione"@it ,
+                       	     "has violation timing"@en .
+
+
+###  https://w3id.org/fuskg/user#hasViolationValidityTimespan
+fsuser:hasViolationValidityTimespan rdf:type owl:DatatypeProperty ;
+	rdfs:domain fsuser:Violation ;
+	rdfs:range  xsd:dateTimeStamp ;
+	rdfs:comment "This property specifies the timespan during which the violation is valid."@en ;
+	rdfs:label "ha arco temporale di validita' di violazione"@it ,
+	"has violation validity timespan"@en .
+
+The Turtle description of the structure of an activity is:
+
+@prefix : <https://w3id.org/fuskg/activity#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xml: <http://www.w3.org/XML/1998/namespace> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix vann: <http://purl.org/vocab/vann/> .
+@prefix fsacti: <https://w3id.org/fuskg/activity#> .
+@prefix fscore: <https://w3id.org/fuskg/core#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@base <https://w3id.org/fuskg/activity> .
+
+<https://w3id.org/fuskg/activity> rdf:type owl:Ontology ;
+                                   owl:imports <https://media.githubusercontent.com/media/IDA-FBK/FuS-KG/refs/heads/main/ontology/TBox/fuskg-core.ttl> ,
+                                               <https://media.githubusercontent.com/media/IDA-FBK/FuS-KG/refs/heads/main/ontology/TBox/fuskg-multimodal.ttl> ;
+                                   dcterms:creator "Gianluca Apriceno" ,
+                                                   "Jacopo Bennati" ,
+                                                   "Mauro Dragoni" ,
+                                                   "Tania Bailoni" ;
+                                   dcterms:issued "2017-05-02" ;
+                                   dcterms:license <https://creativecommons.org/licenses/by-nc-sa/4.0/> ;
+                                   dcterms:modified "2024-12-06" ;
+                                   dcterms:publisher "Intelligent Digital Agents Research Group @ Digital Health and Wellbeing Center, Fondazione Bruno Kessler <https://digitalhealthcenter-en.fbk.eu/home>" ;
+                                   dcterms:rights "CreativeCommons 4.0 NonCommercial-ShareAlike <https://creativecommons.org/licenses/by-nc-sa/4.0/>"@en ;
+                                   dcterms:title "Activity Module of Functional Status Knowledge Graph (FuS-KG)"@en ;
+                                   vann:preferredNamespacePrefix "fsacti" ;
+                                   vann:preferredNamespaceUri "https://w3id.org/fuskg/activity#" ;
+                                   owl:versionInfo "1.0.0"@en .
+
+#################################################################
+#    Annotation properties
+#################################################################
+
+###  http://purl.org/dc/terms/creator
+dcterms:creator rdf:type owl:AnnotationProperty .
+
+
+###  http://purl.org/dc/terms/issued
+dcterms:issued rdf:type owl:AnnotationProperty .
+
+
+###  http://purl.org/dc/terms/license
+dcterms:license rdf:type owl:AnnotationProperty .
+
+
+###  http://purl.org/dc/terms/modified
+dcterms:modified rdf:type owl:AnnotationProperty .
+
+
+###  http://purl.org/dc/terms/publisher
+dcterms:publisher rdf:type owl:AnnotationProperty .
+
+
+###  http://purl.org/dc/terms/rights
+dcterms:rights rdf:type owl:AnnotationProperty .
+
+
+###  http://purl.org/dc/terms/title
+dcterms:title rdf:type owl:AnnotationProperty .
+
+
+###  http://purl.org/vocab/vann/preferredNamespacePrefix
+vann:preferredNamespacePrefix rdf:type owl:AnnotationProperty .
+
+
+###  http://purl.org/vocab/vann/preferredNamespaceUri
+vann:preferredNamespaceUri rdf:type owl:AnnotationProperty .
+
+
+###  http://www.w3.org/2000/01/rdf-schema#domain
+rdfs:domain rdf:type owl:AnnotationProperty .
+
+
+###  http://www.w3.org/2000/01/rdf-schema#range
+rdfs:range rdf:type owl:AnnotationProperty .
+
+
+###  https://w3id.org/fuskg/activity#activityCode
+fsacti:activityCode rdf:type owl:AnnotationProperty .
+
+
+###  https://w3id.org/fuskg/activity#commonSense
+fsacti:commonSense rdf:type owl:AnnotationProperty ;
+                   rdfs:comment "This annotation is used to specify common sense labels of activities."@en ;
+                   rdfs:label "common sense"@en ,
+                              "senso comue"@it .
+
+
+#################################################################
+#    Object Properties
+#################################################################
+
+###  https://w3id.org/fuskg/activity#practicedBy
+fsacti:practicedBy rdf:type owl:ObjectProperty ;
+                   rdfs:domain fsacti:SpecializedActivity ;
+                   rdfs:range fsacti:PractitionerType .
+
+
+###  https://w3id.org/fuskg/activity#specializes
+fsacti:specializes rdf:type owl:ObjectProperty ;
+                   rdfs:domain fsacti:SpecializedActivity ;
+                   rdfs:range fscore:Activity .
+
+
+#################################################################
+#    Data properties
+#################################################################
+
+###  https://w3id.org/fuskg/activity#hasMETValue
+fsacti:hasMETValue rdf:type owl:DatatypeProperty ;
+                   rdfs:domain fsacti:SpecializedActivity ;
+                   rdfs:range xsd:double ;
+                   rdfs:comment "This property specifies the MET value of an activity."@en ;
+                   rdfs:label "ha valore MET"@en ,
+                              "has MET value"@en .
+
+
+###  https://w3id.org/fuskg/activity#hasUnitKCalValue
+fsacti:hasUnitKCalValue rdf:type owl:DatatypeProperty ;
+                        rdfs:domain fsacti:SpecializedActivity ;
+                        rdfs:range xsd:double ;
+                        rdfs:comment "This property specifies the value of Kcal a person spends per kg of weight performing one minute of an activity."@en ;
+                        rdfs:label "ha valore di unita' di Kcal"@en ,
+                                   "has Kcal unit value"@en .
+
+
+#################################################################
+#    Classes
+#################################################################
+
+###  https://w3id.org/fuskg/activity#Bicycling
+fsacti:Bicycling rdf:type owl:Class ;
+                 rdfs:subClassOf fsacti:PhysicalActivity ;
+                 rdfs:comment "Concept denoting activities belonging to the Bicycling category."@en ;
+                 rdfs:label "Andare in Bicicletta"@it ,
+                            "Bicycling"@en .
+
+
+###  https://w3id.org/fuskg/activity#ConditioningExercise
+fsacti:ConditioningExercise rdf:type owl:Class ;
+                            rdfs:subClassOf fsacti:PhysicalActivity ;
+                            rdfs:comment "Concept denoting activities belonging to the Conditioning Exercise category."@en ;
+                            rdfs:label "Conditioning Exercise"@en ,
+                                       "Sport da Palestra"@it .
+
+
+###  https://w3id.org/fuskg/activity#Dancing
+fsacti:Dancing rdf:type owl:Class ;
+               rdfs:subClassOf fsacti:PhysicalActivity ;
+               rdfs:comment "Concept denoting activities belonging to the Dancing category."@en ;
+               rdfs:label "Ballo e Danza"@it ,
+                          "Dancing"@en .
+
+
+###  https://w3id.org/fuskg/activity#FishingHunting
+fsacti:FishingHunting rdf:type owl:Class ;
+                      rdfs:subClassOf fsacti:PhysicalActivity ;
+                      rdfs:comment "Concept denoting activities belonging to the Fishing and Hunting category."@en ;
+                      rdfs:label "Caccia e Pesca"@it ,
+                                 "Fishing and Hunting"@en .
+
+
+###  https://w3id.org/fuskg/activity#HomeActivity
+fsacti:HomeActivity rdf:type owl:Class ;
+                    rdfs:subClassOf fsacti:LifeActivity ;
+                    rdfs:comment "Concept denoting activities belonging to the Home Activity category."@en ;
+                    rdfs:label "Attività Domestiche"@it ,
+                               "Home Activity"@en .
+
+
+###  https://w3id.org/fuskg/activity#HomeRepair
+fsacti:HomeRepair rdf:type owl:Class ;
+                  rdfs:subClassOf fsacti:LifeActivity ;
+                  rdfs:comment "Concept denoting activities belonging to the Home Repairs category."@en ;
+                  rdfs:label "Bricolage e Riparazioni Domestiche"@it ,
+                             "Home Repairs"@en .
+
+
+###  https://w3id.org/fuskg/activity#LawnGarden
+fsacti:LawnGarden rdf:type owl:Class ;
+                  rdfs:subClassOf fsacti:LifeActivity ;
+                  rdfs:comment "Concept denoting activities belonging to the Lawn and Garden Activities category."@en ;
+                  rdfs:label "Attività in Prato e Giardino"@it ,
+                             "Lawn and Garden Activities"@en .
+
+
+###  https://w3id.org/fuskg/activity#LifeActivity
+fsacti:LifeActivity rdf:type owl:Class ;
+                    rdfs:subClassOf fscore:Activity ;
+                    rdfs:comment "This is the root concept for the Life Activity branch. All sub-concepts represent a specific category regading life activities."@en ;
+                    rdfs:label "Attività di Vita"@it ,
+                               "Life Activity"@en .
+
+
+###  https://w3id.org/fuskg/activity#MusicPlaying
+fsacti:MusicPlaying rdf:type owl:Class ;
+                    rdfs:subClassOf fsacti:LifeActivity ;
+                    rdfs:comment "Concept denoting activities belonging to the Music Playing category."@en ;
+                    rdfs:label "Music Playing"@en ,
+                               "Suonare Musica"@it .
+
+
+###  https://w3id.org/fuskg/activity#Occupation
+fsacti:Occupation rdf:type owl:Class ;
+                  rdfs:subClassOf fsacti:LifeActivity ;
+                  rdfs:comment "Concept denoting activities belonging to the Occupation category."@en ;
+                  rdfs:label "Lavori ed Occupazioni"@it ,
+                             "Occupation"@en .
+
+
+###  https://w3id.org/fuskg/activity#PhysicalActivity
+fsacti:PhysicalActivity rdf:type owl:Class ;
+                        rdfs:subClassOf fscore:Activity ;
+                        rdfs:comment "This is the root concept for the Physical Activity branch. All sub-concepts represent a specific category regarding physical activities."@en ;
+                        rdfs:label "Attività Fisica"@it ,
+                                   "Physical Activity"@en .
+
+
+###  https://w3id.org/fuskg/activity#PractitionerType
+fsacti:PractitionerType rdf:type owl:Class .
+
+
+###  https://w3id.org/fuskg/activity#RelaxingActivityAndHobbies
+fsacti:RelaxingActivityAndHobbies rdf:type owl:Class ;
+                                  rdfs:subClassOf fsacti:LifeActivity ;
+                                  rdfs:comment "Concept denoting activities belonging to the Relaxing or Hobby Activities category."@en ;
+                                  rdfs:label "Hobby e Attivià di Riposo"@it ,
+                                             "Relaxing and Hobby Activities"@en .
+
+
+###  https://w3id.org/fuskg/activity#ReligiousActivities
+fsacti:ReligiousActivities rdf:type owl:Class ;
+                           rdfs:subClassOf fsacti:LifeActivity ;
+                           rdfs:comment "Concept denoting activities belonging to the Religious Activities category."@en ;
+                           rdfs:label "Attività Religiose"@it ,
+                                      "Religious Activities"@en .
+
+
+###  https://w3id.org/fuskg/activity#Running
+fsacti:Running rdf:type owl:Class ;
+               rdfs:subClassOf fsacti:PhysicalActivity ;
+               rdfs:comment "Concept denoting activities belonging to the Running category."@en ;
+               rdfs:label "Correre"@it ,
+                          "Runing"@en .
+
+
+###  https://w3id.org/fuskg/activity#SelfCare
+fsacti:SelfCare rdf:type owl:Class ;
+                rdfs:subClassOf fsacti:LifeActivity ;
+                rdfs:comment "Concept denoting activities belonging to the Self Care category."@en ;
+                rdfs:label "Cura Personale"@it ,
+                           "Self Care"@en .
+
+
+###  https://w3id.org/fuskg/activity#SexualActivity
+fsacti:SexualActivity rdf:type owl:Class ;
+                      rdfs:subClassOf fsacti:LifeActivity ;
+                      rdfs:comment "Concept denoting activities belonging to the Sexual Activity category."@en ;
+                      rdfs:label "Attività Sessuale"@it ,
+                                 "Sexual Activity"@en .
+
+
+###  https://w3id.org/fuskg/activity#SpecializedActivity
+fsacti:SpecializedActivity rdf:type owl:Class .
+
+
+###  https://w3id.org/fuskg/activity#Sports
+fsacti:Sports rdf:type owl:Class ;
+              rdfs:subClassOf fsacti:PhysicalActivity ;
+              rdfs:comment "Concept denoting activities belonging to the Sports category."@en ;
+              rdfs:label "Sport"@it ,
+                         "Sports"@en .
+
+
+###  https://w3id.org/fuskg/activity#Transportation
+fsacti:Transportation rdf:type owl:Class ;
+                      rdfs:subClassOf fsacti:LifeActivity ;
+                      rdfs:comment "Concept denoting activities belonging to the Transportation category."@en ;
+                      rdfs:label "Transportation"@en ,
+                                 "Trasporti"@it .
+
+
+###  https://w3id.org/fuskg/activity#Walking
+fsacti:Walking rdf:type owl:Class ;
+               rdfs:subClassOf fsacti:PhysicalActivity ;
+               rdfs:comment "Concept denoting activities belonging to the Walking category."@en ;
+               rdfs:label "Camminare"@it ,
+                          "Walking"@en .
+
+
+###  https://w3id.org/fuskg/activity#WaterActivities
+fsacti:WaterActivities rdf:type owl:Class ;
+                       rdfs:subClassOf fsacti:PhysicalActivity ;
+                       rdfs:comment "Concept denoting activities belonging to the Water Activities category."@en ;
+                       rdfs:label "Attività Acquatiche"@it ,
+                                  "Water Activities"@en .
+
+
+###  https://w3id.org/fuskg/activity#WinterActivities
+fsacti:WinterActivities rdf:type owl:Class ;
+                        rdfs:subClassOf fsacti:PhysicalActivity ;
+                        rdfs:comment "Concept denoting activities belonging to the Winter Activities category."@en ;
+                        rdfs:label "Attività Invernali"@it ,
+                                   "Winter Activities"@en .
+
+
+###  https://w3id.org/fuskg/core#Activity
+fscore:Activity rdf:type owl:Class .
+
+The Turtle encoded data about the user and the food consumed is:
+
+@prefix : <https://w3id.org/fuskg/user-example#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix fsacti: <https://w3id.org/fuskg/activity#> .
+@prefix fscore: <https://w3id.org/fuskg/core#> .
+@prefix fsdise: <https://w3id.org/fuskg/disease#> .
+@prefix fsguid: <https://w3id.org/fuskg/guidelines#> .
+@prefix fsfood: <https://w3id.org/fuskg/food#> .
+@prefix fsreci: <https://w3id.org/fuskg/recipe#> .
+@prefix fsuser: <https://w3id.org/fuskg/user#> .
+@prefix fstemp: <https://w3id.org/fuskg/temporal#> .
+
+#################################################################
+#    Individual: Patient8
+#################################################################
+
+:Patient8 rdf:type owl:NamedIndividual , fsuser:User , fsbarr:Patient ;
+    fsuser:hasAge 60 ;
+    fsdise:hasDisease fsdise:Diabetes ;
+    fsuser:consumed :Dinner-P8-1 , :Dinner-P8-2 ;
+    fsuser:performed :ACT-P8-1 , :ACT-P8-2 ;
+    rdfs:label "Patient8"@en .
+
+#################################################################
+#    Monitoring Rule: Weekly FOOD-19014 (White Chocolate) limit
+#################################################################
+
+:MR1-P8 rdf:type owl:NamedIndividual , fsguid:MonitoringRule ;
+    fsguid:monitors :Patient8 ;
+    fsguid:hasMonitoredValue 50 ;
+    fsguid:hasOperator "Less" ;
+    fsguid:hasRuleId "MR1-P8" ;
+    fsguid:monitoredEntity fsfood:FOOD-19014 ;
+    fsguid:monitoredEntityType fscore:Food ;
+    fsguid:timing fstemp:Week .
+
+#############################################################################
+#    Monitoring Rule: Weekly ACTIVITY-12020 (Jogging) duration
+#############################################################################
+
+:MR2-P8 rdf:type owl:NamedIndividual , fsguid:MonitoringRule ;
+    fsguid:monitors :Patient8 ;
+    fsguid:hasMonitoredValue 7200000 ;
+    fsguid:hasOperator "Greater" ;
+    fsguid:hasRuleId "MR2-P8" ;
+    fsguid:monitoredEntity fsacti:ACTIVITY-12020 ;
+    fsguid:monitoredEntityType fsacti:Running ;
+    fsguid:timing fstemp:Week .
+
+#################################################################
+#    Activity Instances
+#################################################################
+
+:ACT-P8-1 rdf:type owl:NamedIndividual , fsuser:PerformedActivity ;
+    fsuser:hasActivity fsacti:ACTIVITY-12020 ;
+    fsuser:hasUser :Patient8 ;
+    fsuser:activityDuration "3720000"^^xsd:long ;
+    fsuser:activityStartTimestamp "2025-02-04T08:01:35"^^xsd:dateTime ;
+    fsuser:activityEndTimestamp "2025-02-04T09:03:35"^^xsd:dateTime .
+
+:ACT-P8-2 rdf:type owl:NamedIndividual , fsuser:PerformedActivity ;
+    fsuser:hasActivity fsacti:ACTIVITY-12020 ;
+    fsuser:hasUser :Patient8 ;
+    fsuser:activityDuration "3780000"^^xsd:long ;
+    fsuser:activityStartTimestamp "2025-02-07T10:30:00"^^xsd:dateTime ;
+    fsuser:activityEndTimestamp "2025-02-07T11:33:00"^^xsd:dateTime .
+
+#################################################################
+#    Dinner Instances
+#################################################################
+
+:Dinner-P8-1 rdf:type owl:NamedIndividual , fsuser:Dinner ;
+    fsuser:hasTimestamp "2025-02-03T19:20:13"^^xsd:dateTime ;
+    fsuser:hasConsumedFood :ConsumedFood-Dinner-P8-1-FOOD19014 .
+
+:ConsumedFood-Dinner-P8-1-FOOD19014 rdf:type owl:NamedIndividual , fsuser:ConsumedFood ;
+    fsuser:hasFood fsfood:FOOD-19014 ;
+    fsreci:amountFood 10 .
+
+:Dinner-P8-2 rdf:type owl:NamedIndividual , fsuser:Dinner ;
+    fsuser:hasTimestamp "2025-02-06T20:00:03"^^xsd:dateTime ;
+    fsuser:hasConsumedFood :ConsumedFood-Dinner-P8-2-FOOD19014 .
+
+:ConsumedFood-Dinner-P8-2-FOOD19014 rdf:type owl:NamedIndividual , fsuser:ConsumedFood ;
+    fsuser:hasFood fsfood:FOOD-19014 ;
+    fsreci:amountFood 14 .
+
+###  https://w3id.org/fuskg/food#FOOD-19014
+fsfood:FOOD-19014 rdf:type owl:NamedIndividual ,
+                           fsfood:ChocolateAndCocoa ;
+                  fscore:hasNutrient fsfood:Alanine_000 ,
+                                     fsfood:Alcohol_000 ,
+                                     fsfood:AnimalLipid_2020 ,
+                                     fsfood:AnimalProtein_540 ,
+                                     fsfood:ArachidicAcid_000 ,
+                                     fsfood:ArachidonicAcid_000 ,
+                                     fsfood:Arginine_000 ,
+                                     fsfood:AsparticAcid_000 ,
+                                     fsfood:BehenicAcid_000 ,
+                                     fsfood:BetaCarotene_7500 ,
+                                     fsfood:Biotin_000 ,
+                                     fsfood:ButyricCaproicCaprylicCapricAcid_000 ,
+                                     fsfood:Calcium_27000 ,
+                                     fsfood:CarbsSoluble_5830 ,
+                                     fsfood:Carbs_5830 ,
+                                     fsfood:Chlorine_000 ,
+                                     fsfood:Cholesterol_2300 ,
+                                     fsfood:Copper_000 ,
+                                     fsfood:Cystine_000 ,
+                                     fsfood:DHAAcid_000 ,
+                                     fsfood:DietaryFiber_080 ,
+                                     fsfood:EPAAcid_000 ,
+                                     fsfood:EicosenoicAcid_000 ,
+                                     fsfood:ErucicAcid_000 ,
+                                     fsfood:FolicAcid_1000 ,
+                                     fsfood:Fructose_000 ,
+                                     fsfood:Galactose_000 ,
+                                     fsfood:Glucose_000 ,
+                                     fsfood:GlutamicAcid_000 ,
+                                     fsfood:Glycine_000 ,
+                                     fsfood:Histidine_000 ,
+                                     fsfood:Iodine_000 ,
+                                     fsfood:Iron_020 ,
+                                     fsfood:Isoleucine_000 ,
+                                     fsfood:Lactose_000 ,
+                                     fsfood:LauricAcid_000 ,
+                                     fsfood:Leucine_000 ,
+                                     fsfood:LinoleicAcid_085 ,
+                                     fsfood:LinolenicAcid_023 ,
+                                     fsfood:Lipid_3090 ,
+                                     fsfood:Lysine_000 ,
+                                     fsfood:Magnesium_000 ,
+                                     fsfood:Maltose_000 ,
+                                     fsfood:Manganese_000 ,
+                                     fsfood:Methionine_000 ,
+                                     fsfood:MonounsaturatedLipid_989 ,
+                                     fsfood:MyristicAcid_000 ,
+                                     fsfood:MyristoleicAcid_000 ,
+                                     fsfood:Niacin_020 ,
+                                     fsfood:OleicAcid_972 ,
+                                     fsfood:OtherPolyunsaturatedLipid_000 ,
+                                     fsfood:PalmiticAcid_000 ,
+                                     fsfood:PalmitoleicAcid_000 ,
+                                     fsfood:PantothenicAcid_000 ,
+                                     fsfood:Phenylalanine_000 ,
+                                     fsfood:Phosphorus_23000 ,
+                                     fsfood:PolyunsaturatedLipid_108 ,
+                                     fsfood:Potassium_35000 ,
+                                     fsfood:Proline_000 ,
+                                     fsfood:Protein_800 ,
+                                     fsfood:RetinolEquivalent_2600 ,
+                                     fsfood:SaturatedLipid_1802 ,
+                                     fsfood:Selenium_000 ,
+                                     fsfood:Serine_000 ,
+                                     fsfood:Sodium_11000 ,
+                                     fsfood:Starch_000 ,
+                                     fsfood:StearicAcid_000 ,
+                                     fsfood:Sucrose_000 ,
+                                     fsfood:Sulfur_000 ,
+                                     fsfood:Threonine_000 ,
+                                     fsfood:Tryptophan_000 ,
+                                     fsfood:Tyrosine_000 ,
+                                     fsfood:Valine_000 ,
+                                     fsfood:VegetableLipid_1070 ,
+                                     fsfood:VegetalProtein_260 ,
+                                     fsfood:VitaminA_1300 ,
+                                     fsfood:VitaminB12_000 ,
+                                     fsfood:VitaminB1_008 ,
+                                     fsfood:VitaminB2_049 ,
+                                     fsfood:VitaminB6_007 ,
+                                     fsfood:VitaminC_000 ,
+                                     fsfood:VitaminD_000 ,
+                                     fsfood:VitaminE_114 ,
+                                     fsfood:Zinc_090 ;
+                  fsfood:amountCalories "529.0"^^xsd:double ;
+                  fsfood:amountEnergy "2213.0"^^xsd:double ;
+                  fsfood:amountWater "0.6"^^xsd:double ;
+                  fsfood:ediblePart "100.0"^^xsd:double ;
+                  rdfs:label "Cioccolato Bianco"@it ,
+                             "White Chocolate"@en ;
+                  fsfood:foodId "19014" .
+
+The timestamp at which the week starts and the timestamp when the temporal check of the monitoring rules takes place is:
+
+Week starts at 2025-02-03T00:00:00^^xsd:dateTime - Temporal check at: 2025-02-09T23:59:59^^xsd:dateTime
