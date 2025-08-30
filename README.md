@@ -1,5 +1,5 @@
 # LLM-Clinical-Risks
-Repository for the paper "Exploration of Risks in Adopting Large Language Models Reasoning Capabilities in Clinical Settings"
+Repository for the paper "Exploring Capabilities and Risks of Large Language Models’ Reasoning in Clinical Settings"
 
 ## Repository structure
 
